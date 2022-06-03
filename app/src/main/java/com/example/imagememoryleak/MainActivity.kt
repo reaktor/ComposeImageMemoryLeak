@@ -6,8 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +15,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,7 +46,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {
-                        LazyRowOfImages()
+                        LazyGridOfImages()
                     }
                 }
             }
@@ -104,15 +105,20 @@ val knownImages = listOf(
 )
 
 @Composable
-fun LazyRowOfImages() {
+fun LazyGridOfImages() {
+    val chunkedItems = remember { knownImages.chunked(3) }
     LazyColumn {
-        items(items = knownImages) { drawableId ->
-            Box(Modifier.size(300.dp)) {
-                Image(
-                    painter = rememberImagePainter(data = drawableId),
-                    contentDescription = "$drawableId",
-                    contentScale = ContentScale.Crop
-                )
+        items(items = chunkedItems) { drawableIds ->
+            Row {
+                for (drawableId in drawableIds) {
+                    Box(Modifier.size(300.dp)) {
+                        Image(
+                            painter = rememberImagePainter(data = drawableId),
+                            contentDescription = "$drawableId",
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
             }
         }
     }
@@ -122,6 +128,6 @@ fun LazyRowOfImages() {
 @Composable
 fun DefaultPreview() {
     ImageMemoryLeakTheme {
-        LazyRowOfImages()
+        LazyGridOfImages()
     }
 }
