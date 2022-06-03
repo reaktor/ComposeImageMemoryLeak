@@ -111,7 +111,7 @@ fun LazyGridOfImages() {
         items(items = chunkedItems) { drawableIds ->
             Row {
                 for (drawableId in drawableIds) {
-                    Box(Modifier.size(300.dp)) {
+                    Box(Modifier.size(400.dp)) {
                         Image(
                             painter = rememberImagePainter(data = drawableId),
                             contentDescription = "$drawableId",
@@ -121,13 +121,5 @@ fun LazyGridOfImages() {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ImageMemoryLeakTheme {
-        LazyGridOfImages()
     }
 }
